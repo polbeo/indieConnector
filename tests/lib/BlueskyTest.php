@@ -18,6 +18,30 @@ class BlueskyTest extends TestCase
         $this->externalPostSenderMock = $this->createMock(ExternalPostSender::class);
     }
 
+    /**
+     * @group bluesky
+     * @testdox connect - authenticates with the configured handle and password
+     */
+    public function testConnectAuthenticatesWithHandleAndPassword()
+    {
+        $this->bskClientMock
+            ->expects($this->once())
+            ->method('auth')
+            ->with('alice.bsky.social', 'app-password');
+
+        $bluesky = new Bluesky(
+            true,
+            'alice.bsky.social',
+            'app-password',
+            0,
+            $this->outboxMock,
+            $this->bskClientMock,
+            $this->externalPostSenderMock
+        );
+
+        $bluesky->connect();
+    }
+
     // -------------------------
     // getUrlFromDid
     // -------------------------
